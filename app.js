@@ -21,12 +21,20 @@ require('./config')(app);
 // use session here:
 require('./config/session.config')(app);
 
+// Favicon
+const favicon = require('serve-favicon')
+const path = require('path')
+app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')))
+
 // Router
 const index = require('./routes/index');
 app.use('/', index);
 
 const authRouter = require('./routes/auth.routes');
 app.use('/', authRouter);
+
+const nyapsRouter = require('./routes/nyaps.routes');
+app.use('/nyaps', nyapsRouter);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app);

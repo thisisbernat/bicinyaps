@@ -24,6 +24,7 @@ I'm using the Node template for the *.gitignore* file.
 - *HBS* or *HandlebarsJS*: Templating language to generate dynamic views, based on Mustache templating language.
 - *Nodemon*: helping tool by automatically restarting the node application when file changes in the directory are detected.
 - *Dotenv*: Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
+- *node-fetch-commonjs*: Let's you use *fetch* inside of Node.js
 
 ## Express setup
 ### Installation
@@ -36,6 +37,10 @@ I'm using the Node template for the *.gitignore* file.
 ## Dotenv setup
 ### Installation
 `npm i dotenv`
+
+## Fetch
+### Installation
+`npm i node-fetch-commonjs`
 
 ## Nodemon setup
 ### Installation
@@ -59,4 +64,8 @@ If we take a look at the *package.json* file on the root folder of the project, 
 This means we can start the application with `npm run start` or with `npm run dev` to run it in dev mode (using Nodemon).
 
 
-
+## Seed
+I've created a seed file to fill the database to have some objects to work with.
+`models/Nyap.seed.js`
+It is an independent file from the whole app. It is run with:
+`npm run seed`
