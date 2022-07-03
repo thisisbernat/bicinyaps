@@ -68,15 +68,121 @@ fetch(`${BASE_URL}/nyaps`)
 
 // EVENT TO ADD NEW NYAP
 let newNyapMarker;
-map.on('click', e => {
+map.on('contextmenu', e => {
   if (typeof newNyapMarker !== 'undefined') {
     map.removeLayer(newNyapMarker)
   }
   let latLng = map.mouseEventToLatLng(e.originalEvent)
   newNyapMarker = L.marker([latLng.lat, latLng.lng], { draggable: true }).addTo(map)
-  newNyapMarker.bindPopup(`<form action="${BASE_URL}/nyaps" method="post"><input type="text" name="title" placeholder="Títol"><br><br><input type="text" name="description" placeholder="Descripció"><br><br><input type="hidden" name="latitude" id="latitude" value="${latLng.lat}"><input type="hidden" name="longitude" id="longitude" value="${latLng.lng}"><input type="hidden" name="inMap" value="true"><input type="submit" value="Submit"></form>`)
-    .openPopup();
+  //newNyapMarker.bindPopup(`<form action="${BASE_URL}/nyaps" method="post"><input type="text" name="title" placeholder="Títol"><br><br><input type="text" name="description" placeholder="Descripció"><br><br><input type="hidden" name="latitude" id="latitude" value="${latLng.lat}"><input type="hidden" name="longitude" id="longitude" value="${latLng.lng}"><input type="hidden" name="inMap" value="true"><input type="submit" value="Submit"></form>`)
+  newNyapMarker.bindPopup(`<button type="button" onclick="newNyapForm(${latLng.lat}, ${latLng.lng})" id="newNyapSubmit" class="btn btn-info btn-sm">Submit</button>`, { closeButton: false }).openPopup();
 })
+
+async function newNyapForm(latitude, longitude) {
+  let steps = ['1', '2', '3']
+  const Queue = Swal.mixin({
+    progressSteps: steps,
+    confirmButtonText: 'Següent',
+    showCloseButton: true,
+    showClass: { backdrop: 'swal2-noanimation' },
+    hideClass: { backdrop: 'swal2-noanimation' }
+  })
+
+  const { value: title, isDenied: titleDismissed } = await Queue.fire({
+    text: 'Títol #bicinyap',
+    input: 'text',
+    inputPlaceholder: 'Títol identificatiu del #bicinyap',
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Cal posar un títol!'
+      }
+    },
+    currentProgressStep: 0,
+    showClass: { backdrop: 'swal2-noanimation' },
+    showDenyButton: true,
+    denyButtonText: 'Sortir',
+    preDeny: () => Swal.fire('segur?')
+  })
+
+  if(titleDismissed) {
+    return
+  }
+
+ const { value: description, isDismissed: descriptionDismissed } = await Queue.fire({
+    text: 'Descripció #bicinyap',
+    input: 'textarea',
+    inputPlaceholder: 'Petita descripció del #bicinyap',
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Cal incloure una descripció!'
+      }
+    },
+    currentProgressStep: 1,
+    showClass: {
+      popup: 'none',
+      backdrop: 'swal2-noanimation'
+    }
+  })
+
+  if(descriptionDismissed) {
+    return
+  }
+
+  const { value: email, isDismissed: emailDismissed } = await Queue.fire({
+    text: `Si vols que t'avisem de la publicació del teu #bicinyap, pots escriure el teu email aquí`,
+    input: 'email',
+    inputPlaceholder: 'Correu electrònic',
+    currentProgressStep: 2,
+    confirmButtonText: 'Enviar!',
+    showCancelButton: true,
+    cancelButtonText: 'Continuar sense email',
+    reverseButtons: true,
+    validationMessage: 'Adreça electrònica invàlida',
+    showClass: { backdrop: 'swal2-noanimation' }
+  })
+
+  if(emailDismissed) {
+    return
+  }
+
+  if (title && description) {
+    const newNyap = {
+      title,
+      description,
+      latitude,
+      longitude
+    };
+
+    console.log(newNyap)
+
+    fetch(`${BASE_URL}/nyaps`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newNyap),
+    })
+      .then(result => {
+        Swal.fire({
+          icon: 'success',
+          html: `<p>Moltes gràcies Bicinyaper per a la teva contribució!</p>
+              <p>Els inputs de la comunitat son essencials per millorar la infraestructura ciclista.</p>
+              <p>Ja estem processant la informació que ens has compartit i aviat la veuràs publicada.</p>`,
+          confirmButtonText: `You've been nyaped!`,
+          footer: `<small>#bicinyap número NNNNNN</small>`
+        }).then(function () {
+          window.location = `${BASE_URL}`;
+        });
+      })
+      .catch(error => console.log(error))
+
+
+  }
+}
+
+
+
+
 
 //Changing URL when zoom
 /*

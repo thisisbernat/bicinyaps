@@ -103,6 +103,11 @@ mongoose
     .connect(MONGODB_URI)
     .then((response) => {
         console.log(`Connected to the database: "${response.connection.name}"`);
+
+        //Empty the collection
+        Nyap.collection.drop();
+    })
+    .then(response => {
         return Nyap.insertMany(nyaps);
     })
     .then((response) => {
