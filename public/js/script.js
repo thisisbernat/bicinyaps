@@ -53,16 +53,41 @@ fetch(`${BASE_URL}/carrilsbcn`)
   })
   .catch(err => console.log(`Can't get the carrils`));
 
-  // Get the nyaps from the DB
+// Get the nyaps from the DB
 fetch(`${BASE_URL}/nyaps`)
-.then(response => response.json())
-.then(nyapsObject => {
-  const nyapsArray = nyapsObject.nyaps;
-  nyapsArray.forEach(nyap => {
-    //console.log(nyap)
-    L.marker([nyap.latitude, nyap.longitude]).addTo(map)
-      .bindPopup(`<strong>${nyap.title}</strong><br><p>${nyap.description}</p><img src="${nyap.image}" alt="${nyap.title}" width="300rem">`);
-  });
+  .then(response => response.json())
+  .then(nyapsObject => {
+    const nyapsArray = nyapsObject.nyaps;
+    nyapsArray.forEach(nyap => {
+      //console.log(nyap)
+      L.marker([nyap.latitude, nyap.longitude]).addTo(map)
+        .bindPopup(`<strong>${nyap.title}</strong><br><p>${nyap.description}</p><img src="${nyap.image}" alt="${nyap.title}" width="300rem">`);
+    });
+  })
+  .catch(err => console.log(`Can't get the nyaps`));
+
+// EVENT TO ADD NEW NYAP
+let newNyapMarker;
+map.on('click', e => {
+  if (typeof newNyapMarker !== 'undefined') {
+    map.removeLayer(newNyapMarker)
+  }
+  let latLng = map.mouseEventToLatLng(e.originalEvent)
+  newNyapMarker = L.marker([latLng.lat, latLng.lng], { draggable: true }).addTo(map)
+  newNyapMarker.bindPopup(`<form action="${BASE_URL}/nyaps" method="post"><input type="text" name="title" placeholder="Títol"><br><br><input type="text" name="description" placeholder="Descripció"><br><br><input type="hidden" name="latitude" id="latitude" value="${latLng.lat}"><input type="hidden" name="longitude" id="longitude" value="${latLng.lng}"><input type="hidden" name="inMap" value="true"><input type="submit" value="Submit"></form>`)
+    .openPopup();
 })
-.catch(err => console.log(`Can't get the nyaps`));
+
+//Changing URL when zoom
+/*
+map.on('zoomend', function () {
+  var zoomLvl = map.getZoom();
+  var currentUrl = window.location.href;
+  var newUrl = (currentUrl.indexOf("?") > -1) ? currentUrl + "&zoom=" + zoomLvl : "?zoom=" + zoomLvl;
+  window.history.pushState({}, null, newUrl);
+});
+*/
+
+
+
 
