@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const fetch = require('node-fetch-commonjs');
 
+const Nyap = require("../models/Nyap.model");
+
 // require auth middleware
 const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 
@@ -14,6 +16,22 @@ router.get("/carrilsbcn", (req, res, next) => {
     .then(res => res.json())
     .then(carrils => res.send(carrils))
     .catch(err => console.log(`Can't get the carrils from l'ajuntament`));
+});
+
+// ********* require fileUploader in order to use it *********
+const fileUploader = require('../config/cloudinary.config');
+
+router.get("/cloud", (req, res, next) => {
+  res.render('cloud');
+});
+
+router.post('/image/post', fileUploader.single('nyap-image'), (req, res) => {
+  res.send(req.file.path)
+});
+
+router.post("/image/postRAW", fileUploader.single('file'),(req, res, next) => {
+  console.log('success!')
+  console.log(req.file.path)
 });
 
 module.exports = router;

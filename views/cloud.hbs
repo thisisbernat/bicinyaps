@@ -1,0 +1,83 @@
+<div id="container mx-auto">
+    <h1>cloud</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="/image/post" method="post" enctype="multipart/form-data">
+
+                <div class="form-group">
+                    <div class="mb-3">
+                        <!--<input class="form-control" type="file" id="formFile" name="nyap-image">-->
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Create</button>
+                <br><br>
+                <button type="button" class="btn btn-dark" onclick="imageUpload()">Image upload</button>
+
+                <br><br>
+                <button type="button" class="btn btn-success" onclick="imageUploadForm()">Upload from form</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function imageUpload() {
+        let Q3 = await Swal.fire({
+            title: 'Select image',
+            input: 'file',
+            inputAttributes: {
+                'accept': 'image/*',
+                'aria-label': 'Upload your profile picture'
+            },
+            customClass: {
+                input: 'form-control nyap-image'
+            }
+        })
+        //console.log(Q3.value)
+        //printImage(Q3.value)
+
+
+        const fileInput = document.querySelector(".nyap-image");
+        const formData = new FormData();
+
+        formData.append('file', fileInput.files[0]);
+
+        const options = {
+            method: 'POST',
+            body: formData
+        };
+
+        fetch('/image/postRAW', options);
+    }
+
+    function imageUploadForm() {
+        const fileInput = document.getElementById("formFile");
+        const formData = new FormData();
+
+        formData.append('file', fileInput.files[0]);
+
+        const options = {
+            method: 'POST',
+            body: formData
+        };
+
+        fetch('/image/postRAW', options);
+    }
+
+    function printImage(file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+            console.log(e.target.result)
+            Swal.fire({
+                title: 'Your uploaded picture',
+                html: `<h1>test</h1>`,
+                imageUrl: e.target.result,
+                imageAlt: 'Foto del nyap',
+                imageWidth: 'auto'
+            })
+        }
+        reader.readAsDataURL(file)
+    }
+
+</script>

@@ -1,96 +1,72 @@
 const nyaps = [
     {
-        title: 'Diputació/Tarragona',
+        category: 'width',
         description: 'El carril bidireccional més estret del món',
         latitude: 41.37648,
         longitude: 2.14855,
         image: 'https://pbs.twimg.com/media/EehAB1OWAAExHfS?format=jpg&name=large',
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Paral·lel/Espanya',
+        category: 'interruptus',
         description: 'Últim tram del carril bici desaparegut',
         latitude: 41.37508,
         longitude: 2.15038,
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Parlament - Superilla St. Antoni',
+        category: 'others',
         description: 'Els cotxes circulen sense tenir en compte les normes de la superilla. No respecten les velocitats màximes, els girs obligatòris ni la prioritat de vianants i bicicletes.',
         latitude: 41.37657,
         longitude: 2.16268,
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Psg. de Colom',
+        category: 'obstacles',
         description: 'Pilones plantades al mig del carril bici',
         latitude: 41.3786,
         longitude: 2.18032,
         image: 'https://pbs.twimg.com/media/FVNK6aBWAAIhMOM?format=jpg&name=large',
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Tetuan',
+        category: 'badConnection',
         description: 'La Plaça de Tetuan és una vergonya',
         latitude: 41.39496,
         longitude: 2.17586,
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Pelai/Bergara',
+        category: 'badConnection',
         description: `Dificultada i limitada la connexió Blai -> Bergara per culpa de l'última actuació de l'ajuntament.`,
         latitude: 41.38576,
         longitude: 2.16723,
         image: 'https://pbs.twimg.com/media/FTYm1crWQAMKb-A?format=jpg&name=large',
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Diagonal/Josep Pla',
+        category: 'interruptus',
         description: `El carril bici s'acaba inesperadament`,
         latitude: 41.41048,
         longitude: 2.21528,
         image: 'https://pbs.twimg.com/media/FI9rrAVXsAID8Yt?format=jpg&name=medium',
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     },
     {
-        title: 'Provença (Sagrada Familia)',
+        category: 'others',
         description: 'Vianants, turistes i ciclistes lluitem pel mateix (limitat) espai. Tram que cal replantejar i adequar urgentment.',
         latitude: 41.40401,
         longitude: 2.17385,
         image: 'https://pbs.twimg.com/media/FVMu6ZWXEAAurLr?format=jpg&name=large',
         inMap: true,
-        creator: {
-            name: 'Seed',
-            email: 'seed@bicinyaps.com'
-        }
+        authorEmail: 'initial@seed.com'
     }
 ];
 
