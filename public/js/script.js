@@ -219,6 +219,7 @@ async function newNyapCategoryQ1(prevInputValue) {
     allowOutsideClick: false,
     allowEscapeKey: false,
     input: 'select',
+    target: '#map',
     inputOptions: {
       'Carril interruptus': 'Carril interruptus',
       'Connexió deficient': 'Connexió deficient',
@@ -255,6 +256,7 @@ async function newNyapDescriptionQ2(isPrevDismissed, prevInputValue) {
         return '🙏 Cal incloure una descripció!'
       }
     },
+    target: '#map',
     showCloseButton: true,
     confirmButtonText: 'Següent',
     showClass: {
@@ -290,6 +292,7 @@ async function newNyapImageQ3(isPrevDismissed, prevInputValue) {
       popup: 'none',
       backdrop: 'swal2-noanimation'
     },
+    target: '#map',
     allowOutsideClick: false,
     allowEscapeKey: false,
     footer: `<span class="text-warning">📷 No és obligatori, però molt recomanable!</span>`,
@@ -330,6 +333,7 @@ async function newNyapReviewQ4(isPrevDismissed, category, description, imageFile
     denyButtonColor: 'grey',
     confirmButtonText: 'Correcte!',
     reverseButtons: false,
+    target: '#map',
     showClass: {
       popup: 'none',
       backdrop: 'swal2-noanimation'
@@ -360,6 +364,7 @@ async function newNyapSuccessQ5(isPrevDismissed) {
     confirmButtonText: `🚲 Endavant!`,
     footer: `<small>#bicinyap número NNNNNN</small>`,
     showCloseButton: false,
+    target: '#map',
     showClass: {
       popup: 'none',
       backdrop: 'swal2-noanimation'
@@ -383,6 +388,7 @@ async function newNyapAuthorEmailQ6(isPrevDismissed) {
     showDenyButton: true,
     denyButtonText: 'No, gràcies',
     denyButtonColor: 'grey',
+    target: '#map',
     validationMessage: 'Adreça electrònica invàlida',
     showCloseButton: false,
     showClass: {

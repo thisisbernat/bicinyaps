@@ -4,6 +4,10 @@
   background-color: white;
 }
 
+#header {
+  display: none;
+}
+
 #newNyapSubmit {
   background: rgba(60, 60, 60, 0);
   border: none;
@@ -27,15 +31,63 @@
   border: none;
   margin-bottom: 1px
 }
+
 .new-nyap-popup .leaflet-popup-content-wrapper a {
   color: rgba(255, 255, 255, 0.1);
 }
+
 .new-nyap-popup .leaflet-popup-tip-container {
   width: 30px;
   height: 15px;
 }
+
 .new-nyap-popup .leaflet-popup-tip {
   background: rgba(60, 60, 60, 0.9);
   border: none;
   box-shadow: none;
+}
+
+/*** Desktop ***/
+@media (min-width: 768px) {
+  #map {
+    height: 42rem;
+    width: 85%;
+    max-width: 1600px;
+    background-color: white;
+    margin: auto;
+  }
+
+  #header {
+    width: 85%;
+    max-width: 1600px;
+    margin: auto;
+    padding-top: 20px;
+    display: block
+  }
+
+  #footer {
+    width: 85%;
+    max-width: 1600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+  }
+
+  /* unvisited link */
+  #footer a:link {
+    color: rgb(120, 120, 120);
+  }
+
+  /* visited link */
+  #footer a:visited {
+    color: rgb(120, 120, 120);
+  }
+
+  /* mouse over link */
+  #footer a:hover {
+    color: rgba(10, 10, 10, 0.9)
+  }
+
 }
