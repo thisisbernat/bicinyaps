@@ -36,6 +36,9 @@ app.use('/', authRouter);
 const nyapsRouter = require('./routes/nyaps.routes');
 app.use('/nyaps', nyapsRouter);
 
+const carrilsRouter = require('./routes/carrils.routes');
+app.use('/carrils', carrilsRouter);
+
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app);
 

@@ -3,3 +3,39 @@
   width: 100%;
   background-color: white;
 }
+
+#newNyapSubmit {
+  background: rgba(60, 60, 60, 0);
+  border: none;
+  color: #F0FFFF;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.75rem;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bold;
+}
+
+/*new-nyap-popup style*/
+.new-nyap-popup .leaflet-popup-content-wrapper {
+  background: rgba(60, 60, 60, 0.9);
+  color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  border-radius: 5px;
+  padding-top: 4px;
+  border: none;
+  margin-bottom: 1px
+}
+.new-nyap-popup .leaflet-popup-content-wrapper a {
+  color: rgba(255, 255, 255, 0.1);
+}
+.new-nyap-popup .leaflet-popup-tip-container {
+  width: 30px;
+  height: 15px;
+}
+.new-nyap-popup .leaflet-popup-tip {
+  background: rgba(60, 60, 60, 0.9);
+  border: none;
+  box-shadow: none;
+}
