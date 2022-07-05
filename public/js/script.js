@@ -23,23 +23,23 @@ const CartoDBVoyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertile
   maxZoom: 20
 });
 
-const Stadia = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', {
-  maxZoom: 20,
-  attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-});
-
 const WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
   attribution: '&copy; Esri'
 });
 
+const Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+	maxZoom: 20,
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+});
+
 // Add default tiles to map
-WorldTopoMap.addTo(map);
+CartoDBVoyager.addTo(map);
 
 // Base maps object
 const baseMaps = {
-  "WTM": WorldTopoMap,
-  "Carto": CartoDBVoyager,
-  "Stadia": Stadia
+  "Base": CartoDBVoyager,
+  "Topogràfic": WorldTopoMap,
+  "Dark": Stadia_AlidadeSmoothDark
 };
 
 // Custom markers
