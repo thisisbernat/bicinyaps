@@ -5,7 +5,7 @@ const nyapSchema = new Schema(
     {
         category: {
             type: String,
-            enum : ['interruptus','badConnection', 'detour', 'degredation', 'width', 'signaling', 'parking', 'obstacles', 'others'],
+            enum : ['Carril interruptus','Connexió deficient', 'Desviament innecessari', 'Deteriorament', 'Amplada insuficient', 'Senyalització', 'Aparcament (mal estat o manca)', 'Obstacles', 'Altres'],
             required: [true, 'Category is required.'],
         },
         description: String,

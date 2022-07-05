@@ -25,13 +25,9 @@ router.get("/cloud", (req, res, next) => {
   res.render('cloud');
 });
 
-router.post('/image/post', fileUploader.single('nyap-image'), (req, res) => {
-  res.send(req.file.path)
-});
-
-router.post("/image/postRAW", fileUploader.single('file'),(req, res, next) => {
-  console.log('success!')
-  console.log(req.file.path)
+router.post("/image/post", fileUploader.single('file'),(req, res, next) => {
+  res.statusMessage = req.file.path;
+  res.sendStatus(200)  
 });
 
 module.exports = router;

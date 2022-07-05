@@ -26,24 +26,24 @@ const googleStreets = L.tileLayer('http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z
 });
 
 const Stadia = L.tileLayer('https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png', {
-	maxZoom: 20,
-	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+  maxZoom: 20,
+  attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
 });
 
 const Sunny = L.tileLayer('https://{s}.tile.jawg.io/jawg-sunny/{z}/{x}/{y}{r}.png?access-token={accessToken}', {
-	attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	minZoom: 0,
-	maxZoom: 22,
-	subdomains: 'abcd',
-	accessToken: 'x6vJ9RpqyN7F8wBcZK1xu8xS16LaRv5OpGrlmBdtBffUeYmYmbUiySjNMfp5rsY7'
+  attribution: '<a href="http://jawg.io" title="Tiles Courtesy of Jawg Maps" target="_blank">&copy; <b>Jawg</b>Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  minZoom: 0,
+  maxZoom: 22,
+  subdomains: 'abcd',
+  accessToken: 'x6vJ9RpqyN7F8wBcZK1xu8xS16LaRv5OpGrlmBdtBffUeYmYmbUiySjNMfp5rsY7'
 });
 
 const WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+  attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 });
 
 // Add default tiles to map
-CartoDBVoyager.addTo(map);
+Sunny.addTo(map);
 
 // Base maps object
 const baseMaps = {
@@ -94,7 +94,6 @@ map.on('contextmenu', e => {
   }
   let latLng = map.mouseEventToLatLng(e.originalEvent)
   newNyapMarker = L.marker([latLng.lat, latLng.lng], { draggable: true }).addTo(map)
-  //newNyapMarker.bindPopup(`<form action="${BASE_URL}/nyaps" method="post"><input type="text" name="title" placeholder="Títol"><br><br><input type="text" name="description" placeholder="Descripció"><br><br><input type="hidden" name="latitude" id="latitude" value="${latLng.lat}"><input type="hidden" name="longitude" id="longitude" value="${latLng.lng}"><input type="hidden" name="inMap" value="true"><input type="submit" value="Submit"></form>`)
   newNyapMarker.bindPopup(`<button type="button" onclick="newNyapQueue(${latLng.lat},${latLng.lng})" id="newNyapSubmit" class="btn btn-info btn-sm">Submit</button>`, { closeButton: false }).openPopup();
 })
 
@@ -105,60 +104,89 @@ async function newNyapQueue(latitude, longitude) {
   let Q1 = await newNyapCategoryQ1()
   let Q2 = await newNyapDescriptionQ2(Q1.isDismissed)
   let Q3 = await newNyapImageQ3(Q2.isDismissed)
-  console.log(Q3.value)
   let Q4 = await newNyapReviewQ4(Q3.isDismissed, Q1.value, Q2.value, Q3.value)
-  if (Q4.isDenied) {
-      Q1 = await newNyapCategoryQ1(Q1.value)
-      Q2 = await newNyapDescriptionQ2(Q1.isDismissed, Q2.value)
-      Q3 = await newNyapImageQ3(Q2.isDismissed, Q3.value)
-      Q4 = await newNyapReviewQ4(Q3.isDismissed, Q1.value, Q2.value, Q3.value)
+  while (Q4.isDenied) {
+    Q1 = await newNyapCategoryQ1(Q1.value)
+    Q2 = await newNyapDescriptionQ2(Q1.isDismissed, Q2.value)
+    Q3 = await newNyapImageQ3(Q2.isDismissed, Q3.value)
+    Q4 = await newNyapReviewQ4(Q3.isDismissed, Q1.value, Q2.value, Q3.value)
   }
   let Q5 = await newNyapSuccessQ5(Q4.isDismissed)
   let Q6 = await newNyapAuthorEmailQ6(Q5.isDismissed)
 
-  const newNyap = { category: Q1.value, description: Q2.value, image: Q3.value, authorEmail: Q6.value, latitude, longitude }
-  console.log(newNyap)
+  let newNyap = {
+    category: Q1.value,
+    description: Q2.value,
+    latitude: latitude,
+    longitude: longitude
+  }
 
-  fetch(`${BASE_URL}/nyaps`, {
+  if (Q6.value) {
+    newNyap.authorEmail = Q6.value
+  }
+
+  if (Q3.value) {
+    const imageUrl = await postImage(Q3.value);
+    newNyap.image = imageUrl
+  }
+
+  await postNyap(newNyap)
+
+}
+
+async function postImage(image) {
+  const formData = new FormData()
+  formData.append('file', image)
+
+  const options = {
+    method: 'POST',
+    body: formData
+  };
+
+  const response = await fetch('/image/post', options)
+
+  return response.statusText
+}
+
+async function postNyap(newNyap) {
+  return await fetch(`${BASE_URL}/nyaps`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(newNyap),
   })
-  .then(result => console.log(result))
-  .catch(err => console.log(err))
 }
 
 async function newNyapCategoryQ1(prevInputValue) {
   let alertConf = {
-      text: 'Tria una categoria',
-      showCloseButton: true,
-      confirmButtonText: 'Següent',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      input: 'select',
-      inputOptions: {
-          interruptus: 'Carril interruptus',
-          badConnection: 'Connexió deficient',
-          detour: 'Desviament innecessari',
-          degredation: 'Deteriorament',
-          width: 'Amplada',
-          signaling: 'Senyalització',
-          parking: 'Aparcaments',
-          obstacles: 'Obstacles',
-          others: 'Altres'
-      },
-      inputValidator: (value) => {
-          if (!value) {
-              return '🙏 Cal seleccionar una categoria!'
-          }
-      },
-      inputPlaceholder: 'De quin tipus de nyap es tracta?'
+    text: 'Tria una categoria',
+    showCloseButton: true,
+    confirmButtonText: 'Següent',
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    input: 'select',
+    inputOptions: {
+      'Carril interruptus': 'Carril interruptus',
+      'Connexió deficient': 'Connexió deficient',
+      'Desviament innecessari': 'Desviament innecessari',
+      'Deteriorament': 'Deteriorament',
+      'Amplada insuficient': 'Amplada insuficient',
+      'Senyalització': 'Senyalització',
+      'Aparcament (mal estat o manca)': 'Aparcament (mal estat o manca)',
+      'Obstacles': 'Obstacles',
+      'Altres': 'Altres'
+    },
+    inputValidator: (value) => {
+      if (!value) {
+        return '🙏 Cal seleccionar una categoria!'
+      }
+    },
+    inputPlaceholder: 'De quin tipus de nyap es tracta?'
   }
 
   if (prevInputValue) {
-      alertConf.inputValue = prevInputValue
+    alertConf.inputValue = prevInputValue
   }
 
   return await Swal.fire(alertConf)
@@ -166,139 +194,155 @@ async function newNyapCategoryQ1(prevInputValue) {
 
 async function newNyapDescriptionQ2(isPrevDismissed, prevInputValue) {
   let alertConf = {
-      text: 'Petita descripció del #bicinyap',
-      input: 'textarea',
-      inputPlaceholder: 'Petita descripció del #bicinyap',
-      inputValidator: (value) => {
-          if (!value) {
-              return '🙏 Cal incloure una descripció!'
-          }
-      },
-      showCloseButton: true,
-      confirmButtonText: 'Següent',
-      showClass: {
-          popup: 'none',
-          backdrop: 'swal2-noanimation'
-      },
-      allowOutsideClick: false,
-      allowEscapeKey: false
+    text: 'Petita descripció del #bicinyap',
+    input: 'textarea',
+    inputPlaceholder: 'Intenta ser concís',
+    inputValidator: (value) => {
+      if (!value) {
+        return '🙏 Cal incloure una descripció!'
+      }
+    },
+    showCloseButton: true,
+    confirmButtonText: 'Següent',
+    showClass: {
+      popup: 'none',
+      backdrop: 'swal2-noanimation'
+    },
+    allowOutsideClick: false,
+    allowEscapeKey: false
   }
 
   if (prevInputValue) {
-      alertConf.inputValue = prevInputValue
+    alertConf.inputValue = prevInputValue
   }
 
   if (!isPrevDismissed) {
-      return await Swal.fire(alertConf)
+    return await Swal.fire(alertConf)
   } else {
-      return { isDismissed: true }
+    return { isDismissed: true }
   }
 }
 
-async function newNyapImageQ3(isPrevDismissed) {
+async function newNyapImageQ3(isPrevDismissed, prevInputValue) {
   let alertConf = {
-      text: 'Vols afegir una foto?',
-      input: 'file',
-      inputAttributes: {
-          'accept': 'image/*',
-          'aria-label': 'Puja la foto del nyap'
-      },
-      showCloseButton: true,
-      confirmButtonText: 'Següent',
-      showClass: {
-          popup: 'none',
-          backdrop: 'swal2-noanimation'
-      },
-      allowOutsideClick: false,
-      allowEscapeKey: false
+    text: 'Vols afegir una foto?',
+    input: 'file',
+    inputAttributes: {
+      'accept': 'image/*',
+      'aria-label': 'Puja la foto del nyap'
+    },
+    showCloseButton: true,
+    confirmButtonText: 'Següent',
+    showClass: {
+      popup: 'none',
+      backdrop: 'swal2-noanimation'
+    },
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    customClass: {
+      input: 'form-control'
+    }
+  }
+
+  if (prevInputValue) {
+    alertConf.footer = '<span class="text-danger">📷 Pots substituir la foto anterior o clicar&nbsp;<i>Següent</i>&nbsp;per mantenir-la</span>'
+    alertConf.imageUrl = URL.createObjectURL(prevInputValue)
+    alertConf.text = 'Vols substituir la foto?'
   }
 
   if (!isPrevDismissed) {
-      return await Swal.fire(alertConf)
+    let Q = await Swal.fire(alertConf)
+    if (Q.value === null) {
+      Q.value = prevInputValue
+    }
+    return Q
   } else {
-      return { isDismissed: true }
+    return { isDismissed: true }
   }
 }
 
-async function newNyapReviewQ4(isPrevDismissed, category, description, image) {
+async function newNyapReviewQ4(isPrevDismissed, category, description, imageFile) {
   let alertConf = {
-      title: 'És correcte la informació?',
-      html: `<div class="card m-5">
-              <div class="card-body">
-                  <h5 class="card-title">${category}</h5>
-                  <p class="card-text">${description}</br>${image}</p>
-              </div>
+    //title: 'És correcte la informació?',
+    html: `<div class="m-5">
+                  <p><strong>Categoria escollida</strong><br><i>${category}</i></p>
+                  <p><strong>Descripció</strong><br><i>${description}</i></p>
+                  <br>
+                  <h4>És correcte la informació?</h4>
             </div>`,
-      showCloseButton: true,
-      showDenyButton: true,
-      denyButtonText: 'Vull corretgir-la',
-      denyButtonColor: 'grey',
-      confirmButtonText: 'Correcte!',
-      reverseButtons: false,
-      showClass: {
-          popup: 'none',
-          backdrop: 'swal2-noanimation'
-      },
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      customClass: {
-          htmlContainer: 'mx-auto'
-      }
+    showCloseButton: true,
+    showDenyButton: true,
+    denyButtonText: 'Vull corretgir-la',
+    denyButtonColor: 'grey',
+    confirmButtonText: 'Correcte!',
+    reverseButtons: false,
+    showClass: {
+      popup: 'none',
+      backdrop: 'swal2-noanimation'
+    },
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    customClass: {
+      htmlContainer: 'mx-auto'
+    }
   }
 
   if (!isPrevDismissed) {
-      return await Swal.fire(alertConf)
+    if (imageFile) {
+      alertConf.imageUrl = URL.createObjectURL(imageFile)
+    }
+    return await Swal.fire(alertConf)
   } else {
-      return { isDismissed: true }
+    return { isDismissed: true }
   }
 }
 
 async function newNyapSuccessQ5(isPrevDismissed) {
   let alertConf = {
-      icon: 'success',
-      html: `<p>Moltes gràcies Bicinyaper per a la teva contribució! 🎉</p>
+    icon: 'success',
+    html: `<p>Moltes gràcies Bicinyaper per a la teva contribució! 🎉</p>
     <p>Els inputs de la comunitat son essencials per millorar la infraestructura ciclista.</p>
     <p>Ja estem processant la informació que ens has compartit i aviat la veuràs publicada.</p>`,
-      confirmButtonText: `🚲 Endavant!`,
-      footer: `<small>#bicinyap número NNNNNN</small>`,
-      showCloseButton: true,
-      showClass: {
-          popup: 'none',
-          backdrop: 'swal2-noanimation'
-      },
-      allowOutsideClick: false,
-      allowEscapeKey: false
+    confirmButtonText: `🚲 Endavant!`,
+    footer: `<small>#bicinyap número NNNNNN</small>`,
+    showCloseButton: false,
+    showClass: {
+      popup: 'none',
+      backdrop: 'swal2-noanimation'
+    },
+    allowOutsideClick: false,
+    allowEscapeKey: false
   }
 
   if (!isPrevDismissed) {
-      return await Swal.fire(alertConf)
+    return await Swal.fire(alertConf)
   } else {
-      return { isDismissed: true }
+    return { isDismissed: true }
   }
 }
 
 async function newNyapAuthorEmailQ6(isPrevDismissed) {
   let alertConf = {
-      text: `Si vols que t'avisem de la publicació del teu #bicinyap, pots escriure el teu email aquí`,
-      input: 'email',
-      inputPlaceholder: 'Correu electrònic',
-      showDenyButton: true,
-      denyButtonText: 'No, gràcies',
-      denyButtonColor: 'grey',
-      validationMessage: 'Adreça electrònica invàlida',
-      showCloseButton: true,
-      showClass: {
-          popup: 'none',
-          backdrop: 'swal2-noanimation'
-      },
-      allowOutsideClick: false,
-      allowEscapeKey: false
+    text: `Si vols que t'avisem de la publicació del teu #bicinyap, pots escriure el teu email aquí`,
+    input: 'email',
+    inputPlaceholder: 'Correu electrònic',
+    showDenyButton: true,
+    denyButtonText: 'No, gràcies',
+    denyButtonColor: 'grey',
+    validationMessage: 'Adreça electrònica invàlida',
+    showCloseButton: false,
+    showClass: {
+      popup: 'none',
+      backdrop: 'swal2-noanimation'
+    },
+    allowOutsideClick: false,
+    allowEscapeKey: false
   }
 
   if (!isPrevDismissed) {
-      return await Swal.fire(alertConf)
+    return await Swal.fire(alertConf)
   } else {
-      return { isDismissed: true }
+    return { isDismissed: true }
   }
 }
 
@@ -333,11 +377,11 @@ async function newNyapForm(latitude, longitude) {
     preDeny: () => Swal.fire('segur?')
   })
 
-  if(titleDismissed) {
+  if (titleDismissed) {
     return
   }
 
- const { value: description, isDismissed: descriptionDismissed } = await Queue.fire({
+  const { value: description, isDismissed: descriptionDismissed } = await Queue.fire({
     text: 'Descripció #bicinyap',
     input: 'textarea',
     inputPlaceholder: 'Petita descripció del #bicinyap',
@@ -353,7 +397,7 @@ async function newNyapForm(latitude, longitude) {
     }
   })
 
-  if(descriptionDismissed) {
+  if (descriptionDismissed) {
     return
   }
 
@@ -370,7 +414,7 @@ async function newNyapForm(latitude, longitude) {
     showClass: { backdrop: 'swal2-noanimation' }
   })
 
-  if(emailDismissed) {
+  if (emailDismissed) {
     return
   }
 

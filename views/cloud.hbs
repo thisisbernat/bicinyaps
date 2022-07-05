@@ -6,7 +6,7 @@
 
                 <div class="form-group">
                     <div class="mb-3">
-                        <!--<input class="form-control" type="file" id="formFile" name="nyap-image">-->
+                        <!-- <input class="form-control" type="file" id="formFile" name="nyap-image"> -->
                     </div>
                 </div>
 
@@ -16,10 +16,13 @@
 
                 <br><br>
                 <button type="button" class="btn btn-success" onclick="imageUploadForm()">Upload from form</button>
+
             </form>
         </div>
     </div>
 </div>
+
+
 
 <script>
     async function imageUpload() {
@@ -31,53 +34,81 @@
                 'aria-label': 'Upload your profile picture'
             },
             customClass: {
-                input: 'form-control nyap-image'
+                input: 'form-control'
             }
         })
-        //console.log(Q3.value)
-        //printImage(Q3.value)
+        const image = Q3.value
 
 
-        const fileInput = document.querySelector(".nyap-image");
-        const formData = new FormData();
+        //printImage2(image)
 
-        formData.append('file', fileInput.files[0]);
+        let newNyap = {
+            category: 'width',
+            description: 'El carril bidireccional més estret del món',
+            latitude: 41.37966,
+            longitude: 2.16756,
+            inMap: true,
+            authorEmail: 'initial@seed.com'
+        }
+
+
+        const formData = new FormData()
+        formData.append('file', image)
 
         const options = {
             method: 'POST',
             body: formData
         };
 
-        fetch('/image/postRAW', options);
+        fetch('/image/post', options)
+            .then(res => {
+                newNyap.image = res.statusText
+                fetch(`${BASE_URL}/nyaps`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newNyap),
+                })
+            })
+
+
+
     }
 
     function imageUploadForm() {
-        const fileInput = document.getElementById("formFile");
-        const formData = new FormData();
+        $('#i_file').change(function (event) {
+            var tmppath = URL.createObjectURL(event.target.files[0]);
+            $("img").fadeIn("fast").attr('src', URL.createObjectURL(event.target.files[0]));
 
-        formData.append('file', fileInput.files[0]);
-
-        const options = {
-            method: 'POST',
-            body: formData
-        };
-
-        fetch('/image/postRAW', options);
+            $("#disp_tmp_path").html("Temporary Path(Copy it and try pasting it in browser address bar) --> <strong>[" + tmppath + "]</strong>");
+        });
     }
 
     function printImage(file) {
         const reader = new FileReader()
         reader.onload = (e) => {
-            console.log(e.target.result)
             Swal.fire({
                 title: 'Your uploaded picture',
-                html: `<h1>test</h1>`,
                 imageUrl: e.target.result,
-                imageAlt: 'Foto del nyap',
-                imageWidth: 'auto'
             })
         }
         reader.readAsDataURL(file)
     }
+
+    function printImage2(file) {
+        /*
+        const href = URL.createObjectURL(file);
+        const img = new Image();
+        img.src = href;
+        document.body.appendChild(img);
+        */
+        const href = URL.createObjectURL(file);
+        Swal.fire({
+            title: 'Your uploaded picture',
+            imageUrl: href,
+        })
+    }
+
 
 </script>

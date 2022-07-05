@@ -1,6 +1,6 @@
 const nyaps = [
     {
-        category: 'width',
+        category: 'Amplada insuficient',
         description: 'El carril bidireccional més estret del món',
         latitude: 41.37648,
         longitude: 2.14855,
@@ -9,7 +9,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'interruptus',
+        category: 'Carril interruptus',
         description: 'Últim tram del carril bici desaparegut',
         latitude: 41.37508,
         longitude: 2.15038,
@@ -17,7 +17,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'others',
+        category: 'Altres',
         description: 'Els cotxes circulen sense tenir en compte les normes de la superilla. No respecten les velocitats màximes, els girs obligatòris ni la prioritat de vianants i bicicletes.',
         latitude: 41.37657,
         longitude: 2.16268,
@@ -25,7 +25,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'obstacles',
+        category: 'Obstacles',
         description: 'Pilones plantades al mig del carril bici',
         latitude: 41.3786,
         longitude: 2.18032,
@@ -34,7 +34,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'badConnection',
+        category: 'Connexió deficient',
         description: 'La Plaça de Tetuan és una vergonya',
         latitude: 41.39496,
         longitude: 2.17586,
@@ -42,7 +42,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'badConnection',
+        category: 'Connexió deficient',
         description: `Dificultada i limitada la connexió Blai -> Bergara per culpa de l'última actuació de l'ajuntament.`,
         latitude: 41.38576,
         longitude: 2.16723,
@@ -51,7 +51,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'interruptus',
+        category: 'Carril interruptus',
         description: `El carril bici s'acaba inesperadament`,
         latitude: 41.41048,
         longitude: 2.21528,
@@ -60,7 +60,7 @@ const nyaps = [
         authorEmail: 'initial@seed.com'
     },
     {
-        category: 'others',
+        category: 'Altres',
         description: 'Vianants, turistes i ciclistes lluitem pel mateix (limitat) espai. Tram que cal replantejar i adequar urgentment.',
         latitude: 41.40401,
         longitude: 2.17385,
