@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const Nyap = require("../models/Nyap.model");
 
+// require auth middleware
+const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
+
 //////// CREATE ////////
 router.post("/nyap", (req, res, next) => {
   Nyap.create(req.body)
@@ -20,7 +23,7 @@ router.get("/nyap/:id", (req, res, next) => {
     .catch(err => console.log(err))
 });
 
-router.get("/nyaps", (req, res, next) => {
+router.get("/nyaps.json", (req, res, next) => {
   const inMapValue = req.query.inMap
   Nyap.find({ inMap: inMapValue })
     .then(nyaps => {
@@ -37,27 +40,37 @@ router.get("/nyaps/count", (req, res, next) => {
     });
 });
 
+router.get('/admin', isLoggedIn, (req, res) => {
+  Nyap.find({ inMap: false })
+    .then(nyaps => {
+      //res.json({ nyaps });
+      //res.send({ userInSession: req.session.currentUser, nyaps: nyaps })
+      res.render('admin', { userInSession: req.session.currentUser, nyaps: nyaps });
+    })
+    .catch(err => console.log(err))
+  
+});
+
 //////// UPDATE ////////
-router.post("/nyap/:id", (req, res, next) => {
+router.post("/nyap/update/:id", (req, res, next) => {
   Nyap.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(nyap => {
       console.log('Updated nyap in DB!')
       console.log(nyap)
-      res.redirect('/')
+      res.redirect('/admin')
     })
     .catch(err => console.log(err))
 });
 
 //////// DELETE ////////
-router.post("/nyap/:id", (req, res, next) => {
+router.post("/nyap/delete/:id", (req, res, next) => {
   Nyap.findByIdAndDelete(req.params.id)
     .then(nyap => {
       console.log('Deleted nyap in DB!')
       console.log(nyap)
-      res.redirect('/')
+      res.redirect('/admin')
     })
     .catch(err => console.log(err))
 });
-
 
 module.exports = router;

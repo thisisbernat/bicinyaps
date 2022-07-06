@@ -1,18 +1,23 @@
 <div class="nyap-partial shadow">
-  <div id="map1" style="height:300px"></div>
+  <div id="map{{@this.index}}" style="height:300px"></div>
   <div class="nyap-details d-flex flex-column justify-content-between">
-    <p><span class="fw-bolder">Categoria</span><br />Obstacles</p>
-    <p><span class="fw-bolder">Descripció</span><br />Lorem ipsum dolor sit amet
-      consectetur adipisicing elit. Consectetur quia natus illo quisquam magni,
-      aspernatur pariatur cum perspiciatis? Cupiditate nihil hic unde incidunt
-      quam ipsum saepe odio quo ipsam excepturi.</p>
-    <p><span class="fw-bolder">Creació:</span>
-      2022-07-06T06:55:00.562+00:00</p>
-    <p><span class="fw-bolder">Email col·laborador:</span>
-      <a href="mailto:initial@seed.com">initial@seed.com</a></p>
+    <p><span class="fw-bolder">Categoria</span><br />{{this.category}}</p>
+    <p><span class="fw-bolder">Descripció</span><br />{{this.description}}</p>
+    <p><span class="fw-bolder">Creació: </span>{{this.created}}</p>
+    <p><span class="fw-bolder">Email col·laborador: </span>
+      {{# if this.authorEmail}}
+      <a href="mailto:{{this.authorEmail}}">{{this.authorEmail}}</a></p>
+      {{else}}
+      No informat
+      {{/if}}
     <div class="icons d-flex align-items-center">
       <span class="fw-bolder">Foto:</span>
-      <i class="fa-solid fa-image fs-2"></i>
+      {{# if this.image}}
+      <a href="{{this.image}}" target="_blank"><i class="fa-solid fa-image fs-2"></i></a>        
+      {{else}}
+      No informada
+      {{/if}}
+      
     </div>
   </div>
   <div class="d-flex justify-content-end align-items-center">

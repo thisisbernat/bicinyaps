@@ -10,6 +10,8 @@
     <h3>Eina col·laborativa de millora de la infraestructura ciclista de Barcelona</h3>
 </div>
 
+<!--{{ nyaps.0.category }}-->
+
 <div class="content-admin">
     <hr />
     <div class="text-center">
@@ -19,11 +21,9 @@
         </div>
     </div>
     <br />
-    {{> nyapfile}}
-    {{> nyapfile}}
-    {{> nyapfile}}
-    {{> nyapfile}}
-    {{> nyapfile}}
+    {{#each nyaps}}
+        {{> nyapfile}}
+    {{/each}}
 </div>
 
 <div id="footer">

@@ -34,9 +34,7 @@ router.post('/signup', isLoggedOut, (req, res, next) => {
         .catch(error => next(error));
 });
 
-router.get('/admin', isLoggedIn, (req, res) => {
-    res.render('admin', { userInSession: req.session.currentUser });
-});
+
 
 //////////// L O G I N ///////////
 

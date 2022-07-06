@@ -130,7 +130,7 @@ showCarrilsLayers()
 
 
 // Get the nyaps from the DB
-fetch(`${BASE_URL}/nyaps?inMap=true`)
+fetch(`${BASE_URL}/nyaps.json?inMap=true`)
   .then(response => response.json())
   .then(nyapsObject => {
     const nyapsArray = nyapsObject.nyaps;
