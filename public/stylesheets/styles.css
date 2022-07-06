@@ -1,7 +1,30 @@
+/* {
+  outline: solid 1px green;
+}*/
+
 #map {
   height: 100%;
   width: 100%;
   background-color: white;
+}
+
+.position-absolute {
+  position: absolute;
+}
+
+/* unvisited link */
+.link:link, #header a:link, #footer a:link {
+  color: rgb(120, 120, 120);
+}
+
+/* visited link */
+.link:visited, #header a:visited, #footer a:visited {
+  color: rgb(120, 120, 120);
+}
+
+/* mouse over link */
+.link:hover, #header a:hover, #footer a:hover {
+  color: rgba(10, 10, 10, 0.9);
 }
 
 #header {
@@ -12,10 +35,69 @@
   display: none;
 }
 
+.login {
+  height: 73%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
+}
+
+#login-form {
+  width: 25%;
+  min-width: 300px;
+  margin-top: 150px;
+  padding: 2rem 2rem;
+  border-radius: 15px;
+}
+
+button.link {
+	font-size: 2rem;
+	text-align: left;
+	color: rgb(120, 120, 120);
+	background: none;
+	margin: 0;
+	padding: 0;
+	border: none;
+	cursor: pointer;
+}
+
+.content-admin {
+  margin: auto;
+  width: 85%
+}
+
+.nyap-partial {
+  display:grid;
+  gap: 1.5rem;
+  grid-template-columns: 20fr 35fr 5fr;
+  padding: 1.5rem;
+  margin-bottom: 35px;
+  border-radius: 15px;
+}
+
+.icons {
+  gap: 10px;
+  padding-right: 10px;
+}
+
+.nyap-actions {
+  font-size: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 12px;
+  background-color: rgb(60,60,60);
+  color: rgba(255,255,255,0.7);
+  border-radius: 15px;
+
+}
+
 #newNyapSubmit {
   background: rgba(60, 60, 60, 0);
   border: none;
-  color: #F0FFFF;
+  color: #f0ffff;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -33,7 +115,7 @@
   border-radius: 5px;
   padding-top: 4px;
   border: none;
-  margin-bottom: 1px
+  margin-bottom: 1px;
 }
 
 .new-nyap-popup .leaflet-popup-content-wrapper a {
@@ -54,7 +136,7 @@
 /*** Desktop ***/
 @media (min-width: 768px) {
   #map {
-    height: 42rem;
+    height: 73%;
     width: 85%;
     max-width: 1600px;
     background-color: white;
@@ -66,7 +148,7 @@
     max-width: 1600px;
     margin: auto;
     padding-top: 20px;
-    display: block
+    display: block;
   }
 
   #footer {
@@ -78,20 +160,4 @@
     align-items: center;
     padding-top: 20px;
   }
-
-  /* unvisited link */
-  #footer a:link {
-    color: rgb(120, 120, 120);
-  }
-
-  /* visited link */
-  #footer a:visited {
-    color: rgb(120, 120, 120);
-  }
-
-  /* mouse over link */
-  #footer a:hover {
-    color: rgba(10, 10, 10, 0.9)
-  }
-
 }

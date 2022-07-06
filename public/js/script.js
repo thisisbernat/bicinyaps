@@ -1,12 +1,26 @@
-/*
 document.addEventListener(
   "DOMContentLoaded",
   () => {
-    console.log("JS imported successfully!");
+    let alertConf = {
+      text: 'Fes botó dret sobre el mapa per afegir un #bicinyap!',
+      html: `<i class="fa-solid fa-circle-info"></i> <span>Fes botó dret sobre el mapa per afegir un #bicinyap!</span>`,
+      target: '#map',
+      customClass: {
+        container: 'position-absolute'
+      },
+      toast: true,
+      position: 'bottom-start',
+      timer: 5000,
+      timerProgressBar: true,
+      showConfirmButton: false,
+      showCloseButton: true,
+      grow: true
+    }
+    Swal.fire(alertConf)
   },
   false
 );
-*/
+
 const BASE_URL = window.location.origin;
 
 // Setup init
@@ -27,9 +41,12 @@ const WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/se
   attribution: '&copy; Esri'
 });
 
-const Stadia_AlidadeSmoothDark = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+const Stamen_TonerLite = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+	subdomains: 'abcd',
+	minZoom: 0,
 	maxZoom: 20,
-	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+	ext: 'png'
 });
 
 // Add default tiles to map
@@ -39,7 +56,7 @@ CartoDBVoyager.addTo(map);
 const baseMaps = {
   "Base": CartoDBVoyager,
   "Topogràfic": WorldTopoMap,
-  "Dark": Stadia_AlidadeSmoothDark
+  "B/N": Stamen_TonerLite
 };
 
 // Custom markers
@@ -113,7 +130,7 @@ showCarrilsLayers()
 
 
 // Get the nyaps from the DB
-fetch(`${BASE_URL}/nyaps`)
+fetch(`${BASE_URL}/nyaps?inMap=true`)
   .then(response => response.json())
   .then(nyapsObject => {
     const nyapsArray = nyapsObject.nyaps;
@@ -202,7 +219,7 @@ async function postImage(image) {
 }
 
 async function postNyap(newNyap) {
-  return await fetch(`${BASE_URL}/nyaps`, {
+  return await fetch(`${BASE_URL}/nyap`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

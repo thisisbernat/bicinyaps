@@ -13,6 +13,8 @@ const express = require('express');
 // https://www.npmjs.com/package/hbs
 const hbs = require('hbs');
 
+hbs.registerPartials(__dirname + "/views/partials");
+
 const app = express();
 
 // ℹ️ This function is getting exported from the config folder. It runs most middlewares
@@ -34,7 +36,7 @@ const authRouter = require('./routes/auth.routes');
 app.use('/', authRouter);
 
 const nyapsRouter = require('./routes/nyaps.routes');
-app.use('/nyaps', nyapsRouter);
+app.use('/', nyapsRouter);
 
 const carrilsRouter = require('./routes/carrils.routes');
 app.use('/carrils', carrilsRouter);

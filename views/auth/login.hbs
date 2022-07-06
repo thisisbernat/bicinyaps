@@ -1,22 +1,57 @@
-{{!-- views/auth/login.hbs --}}
+<div id="header">
+  <a href="/">
+  <img
+    src="./images/bicinyaps_logo.png"
+    id="bicinyaps-logo"
+    alt="Bicinyaps logo"
+  />
+  </a>  
+  <h3>Eina col·laborativa de millora de la infraestructura ciclista de Barcelona</h3>
+</div>
 
-<div id="form">
-  <h2>Login</h2>
+<div class="login">
+  <div id="login-form" class="shadow-lg">
+    <div class="d-flex justify-content-center"><h1>Login</h1></div>
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <br />
+        <input
+          type="email"
+          name="email"
+          placeholder="Enter email"
+          class="form-control"
+        />
+      </div>
+      <div class="form-group">
+        <br />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="form-control"
+        />
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary w-100">Submit</button>
+    </form>
+  </div>
+  <br />
+  {{#if errorMessage}}
+    <div class="alert alert-danger" role="alert">
+      {{errorMessage}}
+    </div>
+  {{/if}}
+</div>
 
-  <form action="/login" method="POST">
-
-    <label> Email
-      <input type="email" name="email" placeholder="rockstar@ironhack.com" />
-    </label>
-
-    <label>Password
-      <input type="password" name="password" placeholder="********" />
-    </label>
-
-    <button type="submit">Login</button>
-
-    {{#if errorMessage}}
-      <p class="error">{{errorMessage}}</p>
-    {{/if}}
-  </form>
+<div id="footer">
+  <span style="font-weight:bold;font-size:small;color:rgb(80, 80, 80);">Bernat
+    Escarrà - Ironhack - Barcelona 2022</span>
+  <div id="social-links" style="padding-top:0px;font-size:larger">
+    <a href="https://github.com/thisisbernat/bicinyaps" target="_blank"><i
+        class="fa-brands fa-github"
+      ></i></a>&nbsp;
+    <a href="https://www.linkedin.com/in/bernatescarra/" target="_blank"><i
+        class="fa-brands fa-linkedin"
+      ></i></a>
+  </div>
 </div>

@@ -1,0 +1,43 @@
+<div id="header">
+    <div style="display:flex;justify-content:space-between">
+        <a href="/"><img src="./images/bicinyaps_logo.png" id="bicinyaps-logo" alt="Bicinyaps logo" /></a>
+        <div>
+            <form id="logout-form" action="/logout" method="POST">
+                <button class="link"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+            </form>
+        </div>
+    </div>
+    <h3>Eina col·laborativa de millora de la infraestructura ciclista de Barcelona</h3>
+</div>
+
+<div class="content-admin">
+    <hr />
+    <div class="text-center">
+        <div class="btn-group">
+            <a href="#" class="btn btn-success active btn-lg" aria-current="page">Bicinyaps proposats</a>
+            <a href="#" class="btn btn-success btn-lg">Bicinyaps públics</a>
+        </div>
+    </div>
+    <br />
+    {{> nyapfile}}
+    {{> nyapfile}}
+    {{> nyapfile}}
+    {{> nyapfile}}
+    {{> nyapfile}}
+</div>
+
+<div id="footer">
+    <span style="font-weight:bold;font-size:small;color:rgb(80, 80, 80);">Bernat
+        Escarrà - Ironhack - Barcelona 2022</span>
+    <div id="social-links" style="padding-top:0px;font-size:larger">
+        <a href="https://github.com/thisisbernat/bicinyaps" target="_blank"><i
+                class="fa-brands fa-github"></i></a>&nbsp;
+        <a href="https://www.linkedin.com/in/bernatescarra/" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+
+<script src="/js/script-admin.js"></script>

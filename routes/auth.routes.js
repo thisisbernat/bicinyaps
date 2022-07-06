@@ -13,7 +13,7 @@ const { isLoggedIn, isLoggedOut } = require('../middleware/route-guard.js');
 //////////// S I G N U P ///////////
 
 // GET route ==> to display the signup form to users
-router.get('/signup', isLoggedOut, (req, res) => res.render('auth/signup'));
+//router.get('/signup', isLoggedOut, (req, res) => res.render('auth/signup'));
 
 // POST route ==> to process form data
 router.post('/signup', isLoggedOut, (req, res, next) => {
@@ -29,13 +29,13 @@ router.post('/signup', isLoggedOut, (req, res, next) => {
         })
         .then(userFromDB => {
             console.log('Newly created user is: ', userFromDB);
-            res.redirect('/userProfile')
+            res.redirect('/admin')
         })
         .catch(error => next(error));
 });
 
-router.get('/userProfile', isLoggedIn, (req, res) => {
-    res.render('users/user-profile', { userInSession: req.session.currentUser });
+router.get('/admin', isLoggedIn, (req, res) => {
+    res.render('admin', { userInSession: req.session.currentUser });
 });
 
 //////////// L O G I N ///////////
@@ -63,7 +63,7 @@ router.post('/login', isLoggedOut, (req, res, next) => {
             } else if (bcryptjs.compareSync(password, user.passwordHash)) {
                 //res.render('users/user-profile', { user });
                 req.session.currentUser = user;
-                res.redirect('/userProfile');
+                res.redirect('/admin');
             } else {
                 res.render('auth/login', { errorMessage: 'Incorrect password.' });
             }
