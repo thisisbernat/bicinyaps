@@ -8,6 +8,10 @@
   display: none;
 }
 
+#footer {
+  display: none;
+}
+
 #newNyapSubmit {
   background: rgba(60, 60, 60, 0);
   border: none;
