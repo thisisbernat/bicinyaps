@@ -73,10 +73,10 @@ const nyaps = [
 const Nyap = require("../models/Nyap.model");
 const mongoose = require("mongoose");
 
-const MONGODB_URI = 'mongodb://localhost/bicinyapsdb';
+require('dotenv/config');
 
 mongoose
-    .connect(MONGODB_URI)
+    .connect(process.env.MONGODB_URI)
     .then((response) => {
         console.log(`Connected to the database: "${response.connection.name}"`);
 

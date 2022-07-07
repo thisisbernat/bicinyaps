@@ -12,6 +12,10 @@
   position: absolute;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 /* unvisited link */
 .link:link, #header a:link, #footer a:link {
   color: rgb(120, 120, 120);
@@ -25,6 +29,10 @@
 /* mouse over link */
 .link:hover, #header a:hover, #footer a:hover {
   color: rgba(10, 10, 10, 0.9);
+}
+
+.hidden {
+  display: none;
 }
 
 #header {
@@ -63,7 +71,8 @@ button.link {
 
 .content-admin {
   margin: auto;
-  width: 85%
+  width: 85%;
+  max-width: 1600px;
 }
 
 .nyap-partial {
@@ -81,7 +90,7 @@ button.link {
 }
 
 .nyap-actions {
-  font-size: 3rem;
+  font-size: 2rem;
   display: flex;
   flex-direction: column;
   gap: 45px;
@@ -106,8 +115,8 @@ button.link {
   font-weight: bold;
 }
 
-/*new-nyap-popup style*/
-.new-nyap-popup .leaflet-popup-content-wrapper {
+/* Leaflet popup styles */
+.nyap-popup .leaflet-popup-content-wrapper, .new-nyap-popup .leaflet-popup-content-wrapper {
   background: rgba(60, 60, 60, 0.9);
   color: #fff;
   font-size: 16px;
@@ -118,17 +127,29 @@ button.link {
   margin-bottom: 1px;
 }
 
-.new-nyap-popup .leaflet-popup-content-wrapper a {
+
+.nyap-popup .leaflet-popup-content-wrapper {
+  background: rgba(60, 60, 60, 0.8);
+  margin-bottom: 10px;
+}
+
+.nyap-popup .leaflet-popup-content-wrapper a, .new-nyap-popup .leaflet-popup-content-wrapper a {
   color: rgba(255, 255, 255, 0.1);
 }
 
-.new-nyap-popup .leaflet-popup-tip-container {
+.nyap-popup .leaflet-popup-tip-container, .new-nyap-popup .leaflet-popup-tip-container {
   width: 30px;
   height: 15px;
 }
 
 .new-nyap-popup .leaflet-popup-tip {
   background: rgba(60, 60, 60, 0.9);
+  border: none;
+  box-shadow: none;
+}
+
+.nyap-popup .leaflet-popup-tip {
+  display: none;
   border: none;
   box-shadow: none;
 }

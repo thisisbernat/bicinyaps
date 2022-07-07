@@ -1,30 +1,50 @@
-<div class="nyap-partial shadow">
-  <div id="map{{@this.index}}" style="height:300px"></div>
-  <div class="nyap-details d-flex flex-column justify-content-between">
-    <p><span class="fw-bolder">Categoria</span><br />{{this.category}}</p>
-    <p><span class="fw-bolder">Descripció</span><br />{{this.description}}</p>
-    <p><span class="fw-bolder">Creació: </span>{{this.created}}</p>
-    <p><span class="fw-bolder">Email col·laborador: </span>
-      {{# if this.authorEmail}}
-      <a href="mailto:{{this.authorEmail}}">{{this.authorEmail}}</a></p>
-      {{else}}
-      No informat
-      {{/if}}
-    <div class="icons d-flex align-items-center">
-      <span class="fw-bolder">Foto:</span>
-      {{# if this.image}}
-      <a href="{{this.image}}" target="_blank"><i class="fa-solid fa-image fs-2"></i></a>        
-      {{else}}
-      No informada
-      {{/if}}
-      
+<div>
+  <div class="nyap-partial shadow" id="partial-{{@this.index}}">
+    <div id="map{{@this.index}}" style="height:300px" class="shadow"></div>
+    <div class="nyap-details d-flex flex-column">
+      <p><span class="fw-bolder text-secondary">Categoria</span><br /><span id="category-{{@index}}" class="pointer"
+          title="Clic per editar">{{this.category}}<span class="hidden"> <i
+              class="fa-solid fa-pen text-secondary"></i></span></span></p>
+      <p><span class="fw-bolder text-secondary">Descripció</i></span><br /><span id="description-{{@index}}"
+          class="pointer" title="Clic per editar">{{this.description}}<span class="hidden"> <i
+              class="fa-solid fa-pen text-secondary"></i></span></span></p>
+      <p>
+        <span class="fw-bolder text-secondary">Email col·laborador</span><br />
+        {{# if this.authorEmail}}
+        <a href="mailto:{{this.authorEmail}}">{{this.authorEmail}}</a>
+        {{else}}
+        Desconegut
+        {{/if}}
+      </p>
+      <p>
+        <span class="fw-bolder text-secondary">Foto</span><br />
+        {{# if this.image}}
+        <span id="image-{{@index}}" class="d-flex align-items-center"><a class="link" title="Visualitza la imatge"
+            href="#" onclick="imageDialog(`{{this.id}}`,`{{this.image}}`);return false;"><i
+              class="fa-solid fa-image fs-2"></i></a></span>
+        {{else}}
+        <button type="button" class="btn btn-secondary btn-sm"
+          onclick="uploadImage(`{{this._id}}`, `{{this.image}}`)"><i class="fa-solid fa-upload" title="Puja una imatge"></i></button>
+        {{/if}}
+      </p>
+      <p class="small text-muted">{{dateFormat this.created "dddd, MMMM Do YYYY, h:mm:ss a"}}
+      </p>
     </div>
-  </div>
-  <div class="d-flex justify-content-end align-items-center">
-    <div class="nyap-actions">
-      <i class="fa-solid fa-toggle-off"></i>
-      <i class="fa-solid fa-pen-to-square"></i>
-      <i class="fa-solid fa-trash-can"></i>
+    <div class="d-flex justify-content-end align-items-center">
+      <div class="hidden" id="actions-{{@this.index}}">
+        <div class="nyap-actions">
+          
+          <a class="link" title="Clica per publicar el nyap" href="#"
+            onclick="publishDialog(`{{this._id}}`, `{{@index}}`, `{{inMap}}`)">
+            {{#if inMap}}
+            <i id="toggle{{@index}}" class="fa-solid fa-toggle-on"></i></a>
+            {{else}}
+            <i id="toggle{{@index}}" class="fa-solid fa-toggle-off"></i></a>
+            {{/if}}            
+          <a class="link" title="Clica per eliminar el nyap" href="#"
+            onclick="deleteDialog(`{{this._id}}`, `{{@this.index}}`);return false;"><i class="fa-solid fa-trash-can"></i></a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

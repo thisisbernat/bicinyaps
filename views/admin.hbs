@@ -1,29 +1,46 @@
 <div id="header">
     <div style="display:flex;justify-content:space-between">
-        <a href="/"><img src="./images/bicinyaps_logo.png" id="bicinyaps-logo" alt="Bicinyaps logo" /></a>
+        <a href="/"><img src="../images/bicinyaps_logo.png" id="bicinyaps-logo" alt="Bicinyaps logo" /></a>
         <div>
             <form id="logout-form" action="/logout" method="POST">
-                <button class="link"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+                <button class="link" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
             </form>
         </div>
     </div>
     <h3>Eina col·laborativa de millora de la infraestructura ciclista de Barcelona</h3>
 </div>
 
-<!--{{ nyaps.0.category }}-->
-
 <div class="content-admin">
     <hr />
     <div class="text-center">
         <div class="btn-group">
-            <a href="#" class="btn btn-success active btn-lg" aria-current="page">Bicinyaps proposats</a>
-            <a href="#" class="btn btn-success btn-lg">Bicinyaps públics</a>
+            {{#if inMap}}
+            <a href="/admin/proposats" class="btn btn-secondary btn-lg">Bicinyaps proposats</a>
+            <a href="/admin/publicats" class="btn btn-success active btn-lg" aria-current="page">Bicinyaps publicats</a>
+            {{else}}
+            <a href="/admin/proposats" class="btn btn-success active btn-lg" aria-current="page">Bicinyaps proposats</a>
+            <a href="/admin/publicats" class="btn btn-secondary btn-lg">Bicinyaps publicats</a>
+            {{/if}}
+            
         </div>
     </div>
     <br />
     {{#each nyaps}}
-        {{> nyapfile}}
+    {{> nyapfile}}
     {{/each}}
+
+    {{#unless nyaps}}
+    <div class="d-flex justify-content-center">
+        <div class="alert alert-success w-30" role="alert">
+            <i class="fa-solid fa-circle-info"></i> 
+            {{#if inMap}}
+            No hi ha bicinyaps publicats!
+            {{else}}
+            No hi ha nous bicinyaps proposats!
+            {{/if}}
+        </div>
+    </div>
+    {{/unless }}
 </div>
 
 <div id="footer">
@@ -40,4 +57,5 @@
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
 
+<script src="/js/path-check.js"></script>
 <script src="/js/script-admin.js"></script>

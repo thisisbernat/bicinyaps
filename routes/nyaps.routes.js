@@ -40,15 +40,34 @@ router.get("/nyaps/count", (req, res, next) => {
     });
 });
 
-router.get('/admin', isLoggedIn, (req, res) => {
-  Nyap.find({ inMap: false })
-    .then(nyaps => {
-      //res.json({ nyaps });
-      //res.send({ userInSession: req.session.currentUser, nyaps: nyaps })
-      res.render('admin', { userInSession: req.session.currentUser, nyaps: nyaps });
+router.get("/nyap/:id/votes", (req, res, next) => {
+  Nyap.findById(req.params.id)
+    .then(nyap => {
+      res.json({ id: nyap.id, votes: nyap.votes });
     })
     .catch(err => console.log(err))
-  
+});
+
+router.get('/admin', isLoggedIn, (req, res) => {
+  res.redirect('/admin/proposats')  
+});
+
+router.get('/admin/proposats', isLoggedIn, (req, res) => {
+  const inMap = false
+  Nyap.find({ inMap })
+    .then(nyaps => {
+      res.render('admin', { userInSession: req.session.currentUser, nyaps: nyaps, inMap });
+    })
+    .catch(err => console.log(err))  
+});
+
+router.get('/admin/publicats', isLoggedIn, (req, res) => {
+  const inMap = true
+  Nyap.find({ inMap })
+    .then(nyaps => {
+      res.render('admin', { userInSession: req.session.currentUser, nyaps: nyaps, inMap });
+    })
+    .catch(err => console.log(err))  
 });
 
 //////// UPDATE ////////

@@ -12,6 +12,7 @@ const express = require('express');
 // Handles the handlebars
 // https://www.npmjs.com/package/hbs
 const hbs = require('hbs');
+hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
 
 hbs.registerPartials(__dirname + "/views/partials");
 
@@ -39,6 +40,7 @@ const nyapsRouter = require('./routes/nyaps.routes');
 app.use('/', nyapsRouter);
 
 const carrilsRouter = require('./routes/carrils.routes');
+const { db } = require('./models/Nyap.model');
 app.use('/carrils', carrilsRouter);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes

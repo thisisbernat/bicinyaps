@@ -42,11 +42,11 @@ const WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/se
 });
 
 const Stamen_TonerLite = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-	subdomains: 'abcd',
-	minZoom: 0,
-	maxZoom: 20,
-	ext: 'png'
+  attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  subdomains: 'abcd',
+  minZoom: 0,
+  maxZoom: 20,
+  ext: 'png'
 });
 
 // Add default tiles to map
@@ -129,14 +129,19 @@ async function showCarrilsLayers() {
 showCarrilsLayers()
 
 
-// Get the nyaps from the DB
+// GET THE NYAPS IN MAP
 fetch(`${BASE_URL}/nyaps.json?inMap=true`)
   .then(response => response.json())
   .then(nyapsObject => {
     const nyapsArray = nyapsObject.nyaps;
     nyapsArray.forEach(nyap => {
-
-      const popupContent = `<strong>${nyap.title}</strong><br><p>${nyap.description}</p><img src="${nyap.image}" alt="${nyap.title}" width="300rem">`
+      let popupContent
+      if (!nyap.image) {
+        popupContent = `<strong>Categoria: </strong><em>${nyap.category}</em><br><p class="text-justify">${nyap.description}</p>`
+      }
+      else if (nyap.image) {
+        popupContent = `<img src="${nyap.image}" alt="${nyap.title}" width="300rem" class="shadow-lg" style="margin-bottom:10px;border-radius: 5px;"><strong>Categoria: </strong><em>${nyap.category}</em><br><p class="text-justify">${nyap.description}</p><strong>Vots: </strong><em id="nyap-votes-${nyap._id}">${nyap.votes}</em>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" style="color:white;" onclick="voteForNyap('${nyap._id}')"><i class="fa-solid fa-thumbs-up pointer"></i></a>`
+      }
       const popupOptions = {
         closeButton: false,
         className: 'nyap-popup'
@@ -303,6 +308,7 @@ async function newNyapImageQ3(isPrevDismissed, prevInputValue) {
     },
     showCloseButton: true,
     confirmButtonText: 'Següent',
+    padding: '0 2rem 1rem',
     showClass: {
       popup: 'none',
       backdrop: 'swal2-noanimation'
@@ -353,6 +359,7 @@ async function newNyapReviewQ4(isPrevDismissed, category, description, imageFile
     },
     allowOutsideClick: false,
     allowEscapeKey: false,
+    padding: '0 2rem 1rem',
     customClass: {
       htmlContainer: 'mx-auto'
     }
@@ -369,13 +376,15 @@ async function newNyapReviewQ4(isPrevDismissed, category, description, imageFile
 }
 
 async function newNyapSuccessQ5(isPrevDismissed) {
+  let nyaps = await getNyapsCount()
+
   let alertConf = {
     icon: 'success',
     html: `<p>Moltes gràcies Bicinyaper per a la teva contribució! 🎉</p>
     <p>Els inputs de la comunitat son essencials per millorar la infraestructura ciclista.</p>
     <p>Ja estem processant la informació que ens has compartit i aviat la veuràs publicada.</p>`,
     confirmButtonText: `🚲 Endavant!`,
-    footer: `<small>#bicinyap número NNNNNN</small>`,
+    footer: `<small>#bicinyap número ${nyaps.count}</small>`,
     showCloseButton: false,
     showClass: {
       popup: 'none',
@@ -417,18 +426,47 @@ async function newNyapAuthorEmailQ6(isPrevDismissed) {
   }
 }
 
-/////////////////////
+async function getNyapsCount() {
+  const response = await fetch(`${BASE_URL}/nyaps/count`)
+  const nyaps = await response.json();
+  return nyaps;
+}
 
-//Changing URL when zoom
-/*
-map.on('zoomend', function () {
-  var zoomLvl = map.getZoom();
-  var currentUrl = window.location.href;
-  var newUrl = (currentUrl.indexOf("?") > -1) ? currentUrl + "&zoom=" + zoomLvl : "?zoom=" + zoomLvl;
-  window.history.pushState({}, null, newUrl);
-});
-*/
+function voteForNyap(nyapID) {
+  fetch(`${BASE_URL}/ip-address`)
+    .then(response => {
+      if (response.status === 200) {
+        getNyapVotes(nyapID)
+          .then(response => {
+            let oneMoreVote = response.votes + 1
+            updateNyap(nyapID, { votes: oneMoreVote })
+            const voteCount = document.getElementById(`nyap-votes-${nyapID}`)
+            voteCount.innerText = oneMoreVote
 
+            fetch(`${BASE_URL}/ip-address`, {method: 'POST'})
+          })
+          .catch(err => console.log(err))
+      }
+    })
+    .catch(err => console.log(err))   
+}
 
+async function getNyapVotes(nyapID) {
+  const response = await fetch(`${BASE_URL}/nyap/${nyapID}/votes`)
+  const votes = await response.json();
+  return votes;
+}
 
-
+function updateNyap(nyapID, updateObject) {
+  fetch(`${BASE_URL}/nyap/update/${nyapID}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updateObject),
+  })
+    .then(response => {
+      console.log('Nyap updated!')
+    })
+    .catch(err => console.log(err))
+}
