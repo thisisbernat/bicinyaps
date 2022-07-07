@@ -49,6 +49,11 @@ function publishDialog(nyapID, index, currentInMap) {
         allowEscapeKey: false,
         backdrop: false
     }
+
+    if (currentInMap) {
+        confAlert.text = `Estàs segur que vols despublicar el bicinyap`
+    }
+    
     Swal.fire(confAlert)
         .then(response => {
             if (response.isConfirmed) {

@@ -137,7 +137,7 @@ fetch(`${BASE_URL}/nyaps.json?inMap=true`)
     nyapsArray.forEach(nyap => {
       let popupContent
       if (!nyap.image) {
-        popupContent = `<strong>Categoria: </strong><em>${nyap.category}</em><br><p class="text-justify">${nyap.description}</p>`
+        popupContent = `<strong>Categoria: </strong><em>${nyap.category}</em><br><p class="text-justify">${nyap.description}</p><strong>Vots: </strong><em id="nyap-votes-${nyap._id}">${nyap.votes}</em>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" style="color:white;" onclick="voteForNyap('${nyap._id}')"><i class="fa-solid fa-thumbs-up pointer"></i></a>`
       }
       else if (nyap.image) {
         popupContent = `<img src="${nyap.image}" alt="${nyap.title}" width="300rem" class="shadow-lg" style="margin-bottom:10px;border-radius: 5px;"><strong>Categoria: </strong><em>${nyap.category}</em><br><p class="text-justify">${nyap.description}</p><strong>Vots: </strong><em id="nyap-votes-${nyap._id}">${nyap.votes}</em>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" style="color:white;" onclick="voteForNyap('${nyap._id}')"><i class="fa-solid fa-thumbs-up pointer"></i></a>`
